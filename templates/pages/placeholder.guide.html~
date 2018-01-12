@@ -1,0 +1,119 @@
+<!--#include virtual="includes/starthtml.html" -->
+
+<!-- EDITABLE: Section title and meta data -->
+<title>COIL User Guide</title>
+
+<meta name="description" content="Complexity Of Infection Likelihood calculator" />
+<meta name="keywords" content="COIL, Broad Institute of MIT and Harvard" />
+<!-- ENDOF EDITABLE -->
+
+<!--#include virtual="includes/general.html" -->
+<!--#include virtual="includes/topbanner.html" -->
+
+<!-- EDITABLE: navigation -->
+<!--#include virtual="includes/nav.html" -->
+<!-- ENDOF EDITABLE -->
+
+<!-- BEGIN Breadcrumb and Content -->
+<div id="breadcrumbs">
+
+<!-- EDITABLE: edit breadcrumbs to reflect file locations -->
+<a href="/">Home</a><span class="separator">&gt;</span>
+
+<a href="/scientific-community/science">For the Scientific Community:Science</a>
+<span class="separator">&gt;</span>
+
+<a href="/scientific-community/science/programs/programs">Programs</a>
+<span class="separator">&gt;</span>
+
+<a href="/infect" >Infectious Disease Program</a>
+<span class="separator">&gt;</span>
+
+<a href="/infect/malaria/coil" class="active">COIL</a>
+<span class="separator">&gt;</span>
+
+<a href="/infect/malaria/coil/user.shtml" class="active">User</a>
+<span class="separator">&gt;</span>
+
+User Guide
+<!-- ENDOF EDITABLE -->
+
+</div>
+<div id="content">
+
+<!-- EDITABLE: The page title -->
+<h1>COIL User Guide</h1>
+<!-- ENDOF EDITABLE-->
+
+<div id="content-area">
+<div class="content">
+
+<h2>Input formats</h2>
+
+<h3>Barcodes file</h3>
+
+<p>
+The barcodes file format is very flexible. It can contain any number of 
+whitespace-separated columns where the last column contains your SNP barcode data. This 
+is the only column that COIL is currently aware of. An example of appropriate input 
+file format is given below. Right-click the file below and select 'Save Link As' to 
+store the file locally on your computer.
+</p>
+
+<p><a href="sample.txt">Sample barcode data input file</a></p>
+
+<h3>Allele frequencies file</h3>
+<p>
+These are optional because COIL can calculate the minor allele
+frequencies (MAF) for each assay from the 
+barcodes. <b>However,</b> there are the following caveats:</p>
+
+<ul>
+  <li>You should include as many barcodes from one population as possible.</li>
+  <li>It is very important to include barcodes that do not not include
+  heterogenomic calls. These are used to calibrate the MAFs.</li>
+  <li>Using a different set of barcodes <b>will</b> result in
+  different output if the esimated MAFs for each assay change.</li>
+</ul>
+
+<p>
+The MAFs file contains three columns. The first two are the two alleles possible for 
+that assay of the barcode, the third column is the allele frequency of the allele in 
+the first column.
+</p>
+<p><a href="COIL_sample_MAF_File.txt">Sample MAFs file</a></p>
+
+
+<h2>Output format</h2>
+
+<p>Output is tab-delimited text, with columns providing the following information for
+each sample:</p>
+
+<ol>
+  <li>Sample barcode sequence</li>
+  <li>Estimated COI</li>
+  <li>COI credible interval</li>
+  <li>Posterior probability of the estimated COI value</li>
+</ol>
+
+<p>
+The predictions are output in the same order as the input file. The estimated COI is 
+the "maximal a posteriori" COI, the COI which has the greates probability in the 
+constructed posterior distribution. This probability is provided in the last column.
+</p>
+
+<p>
+The credible interval is the Bayesian analog of the confidence interval, and here 
+specifies the COI bounds under which at least 95% of the posterior distribution lies. 
+<b>NOTE</b>: if you see a "+" appended to the upper bound of your credible interval, 
+that means that the upper bound is actually infinity. This behavior is due to the way 
+COIL is implemented, and reflects the bounds specified during the construction of the 
+prior distribution.
+</p>
+
+</div>
+</div>
+
+<!--#include virtual="includes/quicklinks.html" -->
+<!--#include virtual="includes/footer.html" -->
+<!--#include virtual="includes/endhtml.html" -->

@@ -1,0 +1,16 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Run{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Result</h1>
+</div>
+<p class="lead">See the <a href="{{ url_for('guide') }}">user guide</a> for a full set of instructions.</p>
+
+<p>Here's the barcodes data: {{ barcodes }}<p>
+<p>Here's the MAFs selection: {{ form['maf_radio'] }}</p>
+<p>Here's the mccoil selection: {{ form['mccoil_checkbox'] }}</p>
+<p>Here are MAFs: {{ mafs }}</p>
+<p>Here are the predictions: {{ predictions }}</p>
+
+{% endblock %}

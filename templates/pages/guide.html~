@@ -1,0 +1,55 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Guide{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>User Guide</h1>
+</div>
+
+<div class="container">
+  <h2>Input Formatting</h2>
+  <div class="container">
+    <h3>Minor Allele Frequencies (MAFs)</h3>
+    <h4>From Data</h4>
+    <p>
+      This option is only recommended for datasets with more than 250 samples. We also recommend that you enable MCMC
+      when using this option, to better approximate the true MAFs present in your sampled population. 
+    </p>
+    <h4>From File</h4>
+    <p>
+      This option is recommended if validated MAFs are available for your dataset. The MAFs file should be formatted
+      like <a href="/static/sample_files/coil_maf_test.csv">this sample</a>. In short, a <code>.csv</code> file, with 4 columns
+      corresponding to an index (or barcode position id), the major allele, the minor allele and the minor allele frequency, 
+      respectively. All lines that start with <code>#</code> will be ignored.
+    </p>
+    <h4>From <a href="https://www.malariagen.net/projects/pf3k">pf3k</a></h4>
+    <p>
+      This option is recommended for smaller datasets, where validated MAFs are not available. For this option, you must
+      choose the geography relevant to your samples (listed in the dropdown), as well as submit a file specifying the genomic 
+      positions of your SNP barcodes. The SNP loci file should be formatted like <a href="/static/sample_files/24_snp_barcode_loci.csv">this sample</a>.
+    </p>
+  </div>
+  <div class="container">
+    <h3>SNP Barcodes</h3>
+    <p>
+      The SNP barcodes file should be formatted like <a href="/static/sample_files/coil_24_snp_barcode_test.txt">this sample</a>. In short, a 
+      tab-delimited file with 2 columns, corresponding to the sample id and barcode, respectively. Like the SNP loci file, all lines starting 
+      with <code>#</code> will be ignored. 
+    </p>
+  </div>
+</div>
+<br>
+<div class="container">
+  <h2>Output Formatting</h2>
+  <p>
+    The output is a <code>.csv</code> file with each row corresponding to either a sample (in the same order as the input)
+    or a SNP loci position, with the sample rows listed first and the SNP loci listed second; and with columns corresponding
+    to ids and predictions. In the case of the sample rows, the predictions are COI; in the case of the position rows, the
+    predictions are MAFs (which may or may not be different than the input MAFs depending on whether MCMC approximation was
+    enabled). See <a href="/static/sample_files/coil_result-mafs_from_pf3k_west_africa.csv">here</a> for a sample output file.  
+  </p>
+</div>
+<br>
+<br>
+{% endblock  %}
+

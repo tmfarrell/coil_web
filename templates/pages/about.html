@@ -1,0 +1,20 @@
+{% extends 'layouts/main.html' %}
+{% block title %}About{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>About</h1>
+</div>
+<p class="lead">Read more about COIL in the <a href="https://www.ncbi.nlm.nih.gov/pubmed/25599890">published manuscript.</a></p>
+
+<p>Complex malaria infections are defined as those containing more than one genetically distinct lineage of Plasmodium parasite. Complexity of infection (COI) is a useful parameter to estimate from patient blood samples because it is associated with clinical outcome, epidemiology and disease transmission rate. COIL is a method for estimating COI from a panel of bi-allelic genotyping assays using Bayesian inference.</p>
+
+<p>COIL assumes that distinct parasite lineages in complex infections are unrelated and that genotyped loci do not exhibit significant linkage disequilibrium. Using the population minor allele frequency (MAF) of the genotyped loci, COIL uses the binomial distribution to estimate the likelihood of a COI level given the prevalence of observed monomorphic or polymorphic genotypes within each sample.</p>
+
+<p>COIL reliably estimates COI up to a level of three or five with at least 24 or 96 unlinked genotyped loci, respectively, as determined by in silico simulation and empirical validation. Evaluation of COI levels greater than five in patient samples may require a very large collection of genotype data, making sequencing a more cost-effective approach for evaluating COI under conditions when disease transmission is extremely high. Performance of the method is positively correlated with the MAF of the genotyped loci. COI estimates from existing SNP genotype datasets create a more detailed portrait of disease than analyses based simply on the number of polymorphic genotypes observed within samples.</p>
+
+<p>The capacity to reliably estimate COI from a genome-wide panel of SNP genotypes provides a potentially more accurate alternative to methods relying on PCR amplification of a small number of loci for estimating COI. This approach will also increase the number of applications of SNP genotype data, providing additional motivation to employ SNP barcodes for studies of disease epidemiology or control measure efficacy.</p> 
+
+<p>A stand-alone version of COIL is available for download <a href="https://github.com/kgalinsky/COIL">here</a>.</p>
+
+{% endblock %}

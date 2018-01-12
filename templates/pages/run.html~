@@ -1,0 +1,62 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Run{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Run</h1>
+</div>
+<p class="lead">See the <a href="{{ url_for('guide') }}">user guide</a> for a full set of instructions.</p>
+
+<form> 
+<!-- minor allele freqs -->
+<div class="panel panel-default">
+  <div class="panel-heading"><h4>Select minor allele frequencies (MAFs)</h4></div>
+  <div class="panel-body">
+    <ul class="list-group" id="maf_select_ul">
+      <li class="list-group-item">
+	<input type="radio" class="form-check-input" name="maf_radio" value="data" onchange="add_maf_select(this.value)" checked> 
+        Estimate MAFs directly from SNP barcode data. Only recommended for datasets with more than 250 samples.
+      </li>
+      <li class="list-group-item">
+	<input type="radio" class="form-check-input" name="maf_radio" value="file" onchange="add_maf_select(this.value)"> 
+        Specify MAFs in a separate file. Recommended when previously-computed MAFs for each SNP locus are available.
+      </li>
+      <li class="list-group-item">
+	<input type="radio" class="form-check-label" name="maf_radio" value="pf3k" onchange="add_maf_select(this.value)"> 
+        Use <a href="https://www.malariagen.net/projects/pf3k">pf3k</a> to estimate MAFs 
+	for the region or country most relevant to the data. Recommended for smaller datasets, where no previously-computed MAFs are available.
+      </li>
+      <li class="list-group-item" id="maf_select_li">
+	Great, MAFs will be estimated from the data. 
+      </li>
+    </ul> 
+  </div>
+</div>
+
+<!-- enable mccoil --> 
+<div class="panel panel-default">
+  <div class="panel-heading"><h4>Choose whether to enable Markov Chain Monte Carlo (MCMC) approximation</h4></div>
+  <div class="panel-body">
+    <input type="checkbox" name="mccoil_checkbox" onchange="mccoil_select()">
+    Enable <a href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005348">THE REAL MCCOIL</a> to apply 10,000 iterations 
+    of MCMC during MAF and COI distribution estimation. 
+  </div>
+</div>
+
+<!-- snp barcode submission --> 
+<div class="panel panel-default">
+  <div class="panel-heading"><h4>Upload SNP barcode data</h4></div>
+  <div class="panel-body">
+    <label class="btn btn-default btn-file">
+      Choose SNP Barcodes File
+      <input type="file" name="barcodes" id="barcodes_input" style="display: none"/>
+    </label>
+  </div>
+</div> 
+
+<div class="container">
+  <input class="btn-primary btn-lg" type="submit" value="Compute" />
+</div>
+</form>
+
+{% endblock %}
