@@ -13,7 +13,7 @@ import os
 import rpy2
 import logging
 exec(open('coil_web_utils.py').read())
-from logging import Formatter, FileHandler
+#from logging import Formatter, FileHandler
 # from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, request, send_file
 
@@ -22,7 +22,7 @@ from flask import Flask, render_template, request, send_file
 #----------------------------------------------------------------------------#
 
 app = Flask(__name__)
-app.config.from_object('config')
+#app.config.from_object('config')
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
@@ -63,13 +63,12 @@ def result():
     maf_file_lines = None      # if estimating from data
     if request.form['maf_radio'] == 'file':
         maf_file_lines = [l for l in str(request.files['mafs'].getvalue()).split('\n') if l != '']	
-        #if debugging: print_for_debugging([str(maf_file_lines)])
     elif request.form['maf_radio'] == 'pf3k':
 	# get maf_file_lines based on selection
 	select_file_contents = str(request.files['maf_pos_select'].getvalue())    
 	maf_file_lines = get_filtered_maf_file_lines(request.form['maf_geo_select'], select_file_contents)	
-    else:
-        #if debugging: print_for_debugging([str(barcode_file_lines)])
+    else: 
+        # if debugging: print(request.form)
         pass
     # compute predictions based on whether MCCOIL enabled
     predictions = []
@@ -100,6 +99,7 @@ def internal_error(error):
 def not_found_error(error):
     return render_template('errors/404.html'), 404
 
+'''
 if not app.debug:
     file_handler = FileHandler('error.log')
     file_handler.setFormatter(
@@ -109,6 +109,7 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
+'''
 
 #----------------------------------------------------------------------------#
 # Launch.

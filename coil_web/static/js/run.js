@@ -1,7 +1,7 @@
 /* 
- * coil_dev-run.js 
+ * run.js 
  * 
- * supports js ops of coil_dev-run.shtml
+ * supports js ops of templates/pages/run.html
  */ 
 
 // 
@@ -49,8 +49,6 @@ function add_maf_select(selected) {
 	console.log("Added maf_select_file to maf_select_li.")
     } else if (selected == "pf3k") {
 	maf_select.className = maf_select.className + " clearfix";
-	//maf_select_pf3k_row = document.createElement("div");
-	//maf_select_pf3k_row.className = "form-row";
 	maf_select_pf3k_col1 = document.createElement("div");
 	maf_select_pf3k_col1.className = "form-group col-md-2";
         maf_select_geo = document.createElement("select"); 
@@ -85,7 +83,6 @@ function add_maf_select(selected) {
 	maf_select_pf3k_col2.className = "form-group col-md-2"; 
 	maf_select_file_label = document.createElement("label"); 
 	maf_select_file_label.className = "btn btn-default btn-file";
-	//maf_select_file_label.style = "display: inline; margin: 0px 25px"; 
 	var t = document.createTextNode("Choose SNP Loci File");
 	maf_select_file_label.appendChild(t); 
 	maf_select_file = document.createElement("input");
@@ -98,8 +95,5 @@ function add_maf_select(selected) {
     }
     var maf_select_ul = document.getElementById("maf_select_ul"); 
     maf_select_ul.appendChild(maf_select);
-
-    // change hidden input in form with selected value
-    //document.getElementById("maf_selected_input").value = selected; 
     return;
 }
