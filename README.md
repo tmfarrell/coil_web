@@ -38,9 +38,13 @@ sudo pip install -r requirements.txt
 cd ..
 
 # setup server configurations 
-sudo mod_wsgi-express setup-server /var/www/coil_web/coil_web.wsgi --port 80 \
-  --user www-data --group www-data --server-root=/var/www/coil_web/ \
-  --recorder-directory /var/www/coil_web/ --document-root /var/www/coil_web/coil_web/
+sudo mod_wsgi-express setup-server \
+     /var/www/coil_web/coil_web.wsgi \
+     --port 80 \
+     --user www-data --group www-data \
+     --server-root=/var/www/coil_web/ \
+     --recorder-directory /var/www/coil_web/ \
+     --document-root /var/www/coil_web/coil_web/
 
 # deploy on port 80 
 sudo ./apachectl start
