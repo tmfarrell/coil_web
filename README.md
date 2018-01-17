@@ -72,8 +72,8 @@ sudo mod_wsgi-express setup-server \
 sudo ./apachectl start
 ```    
 
-For further instructions, see these tutorials: 
+For more detailed instructions, see these tutorials: 
 - [PyPI: mod_wsgi](https://pypi.python.org/pypi/mod_wsgi)
 - [Running Flask on macOS with mod_wsgi/wsgi-express](https://davidhamann.de/2017/08/05/running-flask-with-wsgi-on-macos/)
 - [Introducing mod_wsgi-express](http://blog.dscpl.com.au/2015/04/introducing-modwsgi-express.html)
-
+- [mod_wsgi documentation](http://modwsgi.readthedocs.io/en/develop/getting-started.html)
