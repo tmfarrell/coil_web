@@ -11,23 +11,45 @@ barbones setup of Flask, Bootstrap and pure JS for dynamic UI.
 
 ### setup 
 
-To setup/ deploy this app on Debian/ Ubuntu, execute: 
+To setup/ deploy this app on fresh install of Debian/ Ubuntu, install the following system requirements (if you don't have them already): 
 
 ```bash
 # get Apache
 sudo apt-get install apache2
 sudo apt-get install apache2-dev
 
-# get python header files
+# get python and header files
+sudo apt-get install python-2.7
 sudo apt-get install libpython-dev
+```
 
+To install the python dependencies (again, if you don't have them already), execute: 
+
+```bash
 # get pip
 wget https://bootstrap.pypa.io/get-pip.py
 
 # install mod_wsgi
 sudo pip install mod_wsgi
 sudo pip install mod_wsgi-httpd
+```
 
+If you'd like to build a `virtualenv` (a wiser option) rather than system installations, do the following: 
+
+```bash
+# get virtualenv, and open new env
+pip install virtualenv
+virualenv coil_web_env
+source coil_web_env/bin/activate
+
+# then mod_wsgi
+sudo pip install mod_wsgi
+sudo pip install mod_wsgi-httpd
+```
+
+Then install and deploy `coil_web` to port 80: 
+
+```bash
 # get coil_web 
 cd /var/www/
 git clone http://github.com/tmfarrell/coil_web.git
@@ -49,3 +71,9 @@ sudo mod_wsgi-express setup-server \
 # deploy on port 80 
 sudo ./apachectl start
 ```    
+
+For further instructions, see these tutorials: 
+- [PyPI: mod_wsgi](https://pypi.python.org/pypi/mod_wsgi)
+- [Running Flask on macOS with mod_wsgi/wsgi-express](https://davidhamann.de/2017/08/05/running-flask-with-wsgi-on-macos/)
+- [Introducing mod_wsgi-express](http://blog.dscpl.com.au/2015/04/introducing-modwsgi-express.html)
+
