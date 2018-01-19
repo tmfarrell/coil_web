@@ -18,6 +18,9 @@ To setup/ deploy this app on fresh install of Debian/ Ubuntu, install the follow
 sudo apt-get install apache2
 sudo apt-get install apache2-dev
 
+# get R-3.3.3
+sudo apt-get install r-base=3.3.3
+
 # get python and header files
 sudo apt-get install python-2.7
 sudo apt-get install libpython-dev
