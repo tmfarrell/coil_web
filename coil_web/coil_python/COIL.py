@@ -5,7 +5,7 @@ import Barcode, MAF #, Tally, Likelihood, Probability
 
 ## globals
 PADDING = 1
-MAX_COI = 5
+MAX_COI = 15
 ERROR = 0.05
 error_file = ""
 CI_THRESHOLD = 0.95
