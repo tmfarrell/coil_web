@@ -11,22 +11,24 @@ import sys
 sys.path.append('coil_python/')
 import MAF, Barcode
 
+# change this to 'mccoil/McCOIL_categorical_linux.R'
+# if running on a Linux machine
 mccoil_R = 'mccoil/mac_version/McCOIL_categorical.R'
 
 ### functions  
-## zygosity matrix => R dataframe
+
+# zygosity matrix => R dataframe
+# see 'coil_python/Barcode.to_zygosity_matrix' for definition of zygosity matrix
 def to_R_zygosity_df(zygosity_matrix, header=True, index=True): 
     '''  converts python zygosity dataframe into R dataframe  '''
     # fill in samples/ positions
-    samples = []
-    positions = []
+    samples, positions = [], []
     if header: samples = range(1, len(zygosity_matrix))
     else:      samples = range(len(zygosity_matrix))
     if index: positions = range(1, len(zygosity_matrix[0]))
     else:     positions = range(len(zygosity_matrix[0]))
     # add header fields to data_dict (used to init R DataFrame)
-    data_dict = {}
-    pos_to_col_map = {}
+    data_dict, pos_to_col_map = {}, {}
     if header:
         for pos in positions: 
             pos_to_col_map[pos] = zygosity_matrix[0][pos]
@@ -87,7 +89,7 @@ def run_mccoil(barcode_file_lines, maf_file_lines=None, verbose=False):
     return({'mafs': zip(sites, maf_predictions), 'cois': zip(samples, coi_predictions)}) 
 
 
-### main 
+## main 
 def main(): 
     pass
 
