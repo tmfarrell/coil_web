@@ -14,7 +14,7 @@ VALID_CHARS = set(['A','C','G','T','N','X'])
 
 ## cmd line interface usage fcns 
 def usage_barcodeFormat():
-	print """Formatting issue with barcode file.  
+	print("""Formatting issue with barcode file.  
 	
 	Barcode format criteria:
 	All sample lines must have the same number of columns.
@@ -22,28 +22,28 @@ def usage_barcodeFormat():
 	Valid barcode sequence characters are A,C,G,T,X,N.
 	All barcode sequences must be the same length.
 	Only bi-allelic assays are permitted.
-	"""
+	""")
 	
 def usage_MAFFile():
-	print """Formatting issue with MAF file.
+	print("""Formatting issue with MAF file.
 	
 	MAF format criteria:
 	# positions must be equal to # barcode positions.
 	Minor allele frequency must be [0.0,0.5].
-	"""
+	""")
 	
 def usage_ErrorFile():
-	print """Formatting issue with Error File.
+	print("""Formatting issue with Error File.
 	
 	Format criteria:
 	Lines with '#' will not be read.
 	2 columns: [position] [error rate].
 	Error rate must be [0.0,1.0).
 	Each assay must have an error rate specified.
-	"""
+	""")
 
 def usage():
-	print """python COIL.py [options] -b [barcode file]
+	print("""python COIL.py [options] -b [barcode file]
 	
 	Required:
 	-b, --barcode [file]
@@ -65,7 +65,7 @@ def usage():
 	-i, --credible_inteval [float]
 		where [float] is a number (0.0,1.0]
 		default = 0.95
-	"""
+	""")
 
 ## for using COIL via web interface 
 def exec_from_raw_input(barcode_file_lines, maf_file_lines=None): 
@@ -74,7 +74,7 @@ def exec_from_raw_input(barcode_file_lines, maf_file_lines=None):
 	barcodes.readBarcodeFileLines(barcode_file_lines)
 	is_valid_barcode, err_msg = barcodes.validate()
 	if not is_valid_barcode:
-		print err_msg
+		print(err_msg)
 		return([])
 	# read mafs
 	if not maf_file_lines: 
@@ -85,7 +85,7 @@ def exec_from_raw_input(barcode_file_lines, maf_file_lines=None):
 	# validate MAFs 
 	is_valid_mafs, err_msg = mafs.validate()
 	if not is_valid_mafs:
-		print err_msg
+		print(err_msg)
 		return([])
 	# add genotyping errors
 	mafs.setErrorFromConstant(ERROR)
@@ -100,9 +100,12 @@ def exec_from_raw_input(barcode_file_lines, maf_file_lines=None):
 def main(argv):
 	MAF_file = ""
 	barcode_file = ""
+	ERROR = 0.05
+	MAX_COI = 15
+	verbose = False
+	CI_THRESHOLD = 0.95
 	try: 
-		opts, args = getopt.getopt(argv, 
-					   "b:m:s:e:E:i:c:",
+		opts, args = getopt.getopt(argv, "b:m:s:e:E:i:c:",
 					   ["barcode=","maf=","subset=","error=","error_file=","credible_interval=","max_coi="])
 	except getopt.GetoptError:
 		usage()
@@ -110,6 +113,7 @@ def main(argv):
 	for opt, arg in opts:
 		if opt in ("-b","--barcode"):
 			barcode_file = arg
+			get_MAF_from_barcode = 1
 		elif opt in ("-m","--maf"):
 			get_MAF_from_barcode = 0
 			MAF_file = arg
@@ -133,10 +137,10 @@ def main(argv):
 	###Read barcode file, create barcode set, validate barcodes
 	barcodes = Barcode.SetOfBarcodes()
 	barcodes.readBarcodeFile(barcode_file)
-	print len(barcodes.barcodes), "barcodes read"
+	print(len(barcodes.barcodes), "barcodes read")
 	bc_valid = barcodes.validate(VALID_CHARS)
 	if bc_valid[0] == 0:
-		print bc_valid[1]
+		print(bc_valid[1])
 		usage_barcodeFormat()
 		sys.exit(2)
 	
@@ -146,15 +150,15 @@ def main(argv):
 		myMAF.readMAFFile(MAF_file)
 		maf_valid = myMAF.validate()
 		if maf_valid[0]==0:
-			print maf_valid[1]
+			print(maf_valid[1])
 			usage_MAFFile()
 			sys.exit(2)
 	else:
 		myMAF = barcodes.computeMAFFromBarcodes(PADDING)
-	print myMAF
+	if verbose: print(myMAF.head(150))
 
 	###Add genotyping error tolerance
-	if ERROR>=0:
+	if ERROR >= 0:
 		myMAF.setErrorFromConstant(ERROR)
 	else:
 		ret = myMAF.setErrorFromErrorFile(error_file)

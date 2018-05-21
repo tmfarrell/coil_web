@@ -4,6 +4,7 @@
 import sys
 import numpy as np
 import MAF
+from decimal import *
 
 # globals
 VALID_CHARS = set(['A','C','G','T','N','X'])
@@ -12,9 +13,9 @@ VALID_CHARS = set(['A','C','G','T','N','X'])
 class Barcode:
 	def __init__(self, id, sequence):
 		self.id = id
-		self.rough_coi = 0
 		self.seq = sequence
-		
+		self.rough_coi = min(self.seq.count('N') + 1, 3)
+
 	def __len__(self):
 		return(len(self.seq))
 		
@@ -25,13 +26,7 @@ class Barcode:
 		return charset
 		
 	def setRoughCOI(self):
-		n_count = self.seq.count('N')
-		if n_count <= 0:
-			self.rough_coi = 1
-		elif n_count == 1:
-			self.rough_coi = 2
-		else:
-			self.rough_coi = 3
+		self.rough_coi = min(self.seq.count('N') + 1, 3)
 			
 	def getPosition(self, pos): ##pos is base 0
 		return self.seq[pos:pos+1]
@@ -40,32 +35,32 @@ class Barcode:
 		base = self.seq[pos:pos+1]
 		#right now, no N seqs are returned so this if statement is never used
 		if base == 'N':
-			base = 'N'*self.coi
+			base = 'N' * self.rough_coi
 		return base
 		
-	def predictCOI(self, myMAF, max_coi, threshold, std_out=False):
+	def predictCOI(self, myMAF, max_coi, threshold, std_out=False, verbose=False):
 		# get list of (base, position), filtering out missing positions
-		positions = map(lambda (pos, base): (base, pos),\
-				myMAF.filter_missing_positions(self.seq))
-                #- start -#
-		#- bayesian inference computation -#
-		coi = 1
-		rawCOIs = []
-		while coi <= max_coi:
+		positions = myMAF.filter_missing_positions(self.seq)
+                # start MLE #
+		coi_probs = []
+		for coi in range(1,  max_coi + 1):
 			pos_probs = [myMAF.getProbability(pos, coi) for pos in positions]
-			rawCOIs.append(np.prod(pos_probs))
-			#~ if self.seq == 'ANN':
-				#~ print self.seq, coi, pos_probs
-				#~ print np.prod(pos_probs)
-			coi += 1
-		coi_sum = np.sum(rawCOIs)
-		COIs = [x/coi_sum for x in rawCOIs]
-		max_posterior_prob = np.amax(COIs)
-		coi_prediction_idx = COIs.index(max_posterior_prob)
-		confidence_interval = self.getCredibleInterval(COIs, coi_prediction_idx, max_coi, threshold)
-		#- end -#
+			coi_prob = np.prod(pos_probs)
+			if coi_prob == 0.0: 
+				coi_prob = np.prod(map(Decimal, pos_probs))
+			if verbose: print(coi, coi_prob)
+			coi_probs.append(coi_prob)
+		coi_sum = np.sum(coi_probs)
+		if not all(map(lambda c: c == 0, coi_probs)): 
+			coi_estimators = [(x / coi_sum) for x in coi_probs]
+		else: 
+			coi_estimators = ([0.0] * (len(coi_probs) - 1)) + [1.0]
+		max_posterior_prob = np.amax(coi_estimators)
+		coi_prediction_idx = coi_estimators.index(max_posterior_prob)
+		confidence_interval = self.getCredibleInterval(coi_estimators, coi_prediction_idx, max_coi, threshold)
+		# end #
 		p = (self.id, self.seq, coi_prediction_idx + 1, confidence_interval, max_posterior_prob)
-		if std_out: print('\t'.join(p))
+		if std_out: print('\t'.join(map(str, p)))
 		return(p)
 	
 	def getCredibleInterval(self, cois, coi_index, max_coi, threshold):
@@ -143,7 +138,7 @@ class SetOfBarcodes:
 		
 	def readBarcodeFile(self, file):
 		bc_lines = open(file, 'r').readlines()
-		print "Reading barcodes"
+		print("Reading barcodes")
 		self.readBarcodeFileLines(bc_lines)
 	
 	def readBarcodeFileLines(self, bc_lines): 
@@ -171,7 +166,7 @@ class SetOfBarcodes:
 				ret_str = "Invalid character in barcode: " + b.id
 				return (0, ret_str)
 			if b.seq.count('X') > (first_len/2):
-				print "WARNING: " + b.id + " has poor data quality. Consider excluding from analysis"
+				print("WARNING: " + b.id + " has poor data quality. Consider excluding from analysis")
 		return (1, "Barcodes OK")
 		
 	def computeMAFFromBarcodes(self, padding):
@@ -181,8 +176,9 @@ class SetOfBarcodes:
 		for i in range(len(self.barcodes[0])): 
 			myPos = MAF.MAFPosition(i)
 			for b in self.barcodes:
-				if b.rough_coi > 1: continue
-				else: myPos.addChar(b.getPositionForMAF(i))
+				#if b.rough_coi > 1: continue
+				#else: 
+				myPos.addChar(b.getPositionForMAF(i))
 			myPos.getMAFFromChars()
 			myPos.setAlleleProbability(padding)
 			#~ if myPos.isPositionInformative():
