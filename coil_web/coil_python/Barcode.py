@@ -176,9 +176,8 @@ class SetOfBarcodes:
 		for i in range(len(self.barcodes[0])): 
 			myPos = MAF.MAFPosition(i)
 			for b in self.barcodes:
-				#if b.rough_coi > 1: continue
-				#else: 
-				myPos.addChar(b.getPositionForMAF(i))
+				if b.rough_coi > 1: continue
+				else: myPos.addChar(b.getPositionForMAF(i))
 			myPos.getMAFFromChars()
 			myPos.setAlleleProbability(padding)
 			#~ if myPos.isPositionInformative():
