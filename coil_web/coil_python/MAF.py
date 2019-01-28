@@ -57,7 +57,7 @@ class MAF:
 		
 	def validate(self):
 		for pos in self.mafs:
-			if pos.minor_freq < 0.0 or ps.minor_freq > 1.0: # or pos.minor_freq > 0.5:
+			if pos.minor_freq < 0.0 or pos.minor_freq > 1.0: # or pos.minor_freq > 0.5:
 				return (0, "Invalid minor allele frequency")
 			if len(pos.getChars()) > 3:
 				return (0, "Only bi-allelic assays are supported.")
